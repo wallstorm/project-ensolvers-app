@@ -26,7 +26,7 @@ public class FolderService {
         return folderRepository.findById(id);
     }
 
-    public String findByColumnFolder(String folder) {
+    public FolderModel findByColumnFolder(String folder) {
         return folderRepository.findByFolder(folder);
     }
 

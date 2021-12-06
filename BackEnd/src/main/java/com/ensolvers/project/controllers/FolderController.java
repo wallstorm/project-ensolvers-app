@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -38,26 +39,19 @@ public class FolderController {
         return folderService.saveFolder(folder);
     }
 
-    @GetMapping("/get/task")
-    public ArrayList<TaskModel> getTask() {
-        return taskService.getTask();
+    @GetMapping("/query")
+    public ArrayList<TaskModel> getTaskByFolder(@RequestParam("folder") String folder) {
+        return taskService.getTaskByFolder(folder);
     }
 
     @PostMapping("/insert/task")
     public TaskModel saveTask(@RequestBody TaskModel task) {
-        TaskModel taskMo = new TaskModel(task.getTask(), task.getDone(), task.getFolder());
-        FolderModel folderMo = new FolderModel(task.getFolder());
 
-        folderService.saveFolder(folderMo);
-        taskMo.setFolderr(folderMo);
-        
-        String search = folderService.findByColumnFolder(task.getFolder());
-        if (search == task.getFolder()) {
-            
-        }
-        return taskService.saveTask(taskMo);
+        task.setFolderr(folderService.findByColumnFolder(task.getFolder()));
+
+        return taskService.saveTask(task);
     }
-    
+
     @DeleteMapping( path = "/{id}" )
     public String deleteById(@PathVariable("id") Long id) {
         boolean ok = folderService.deleteFolder(id);

@@ -1,6 +1,7 @@
 package com.ensolvers.project.services;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 import com.ensolvers.project.models.TaskModel;
 import com.ensolvers.project.repository.TaskRepository;
@@ -20,5 +21,10 @@ public class TaskService {
     public ArrayList<TaskModel> getTask() {
         return (ArrayList<TaskModel>) taskRepository.findAll();
     }
-    
+    public Optional<TaskModel> getById(Long id) {
+        return taskRepository.findById(id);
+    }
+    public ArrayList<TaskModel> getTaskByFolder(String folder) {
+        return taskRepository.findByFolder(folder);
+    }
 }

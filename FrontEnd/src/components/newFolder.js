@@ -1,15 +1,16 @@
 import React from "react";
 
-export default function Input({ 
+export default function NewFolder({ 
+        value,
         onNewFolderChange,
-        onNewFolderButton }) {
+        onNewFolder }) {
 
     const handleNewFolderChange = (e) => {
         onNewFolderChange(e.target.value);
     }
 
     const handleAddButton = () => {
-        onNewFolderButton();
+        onNewFolder();
     }
     
     return (
@@ -17,6 +18,7 @@ export default function Input({
             <input 
                 type="text"
                 placeholder="add a folder"
+                value={value || ''}
                 onChange={handleNewFolderChange}
             />
             <button onClick={handleAddButton} className="btn btn-success" >Add</button>

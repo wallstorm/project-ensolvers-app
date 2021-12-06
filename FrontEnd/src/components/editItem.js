@@ -1,17 +1,16 @@
 import React from 'react';
 
-export default function EditTask({ taskNewEdited, onTaskEdited, taskToEdit, setTasks, onSaveEditedTask, onCancelEdit }) {
+export default function EditTask({ taskNewEdited, onTaskEdited, onSaveEditedTask, onCancelEdit }) {
     
     const taskEdited = e => {
         onTaskEdited(e.target.value);
     }
 
-    const saveEditedTask = e => {
-        console.log("asd: ",e.target.value);
+    const saveEditedTask = () => {
         onSaveEditedTask();
     }
 
-    const cancelEdit = e => {
+    const cancelEdit = () => {
         onCancelEdit();
     }
 
@@ -19,11 +18,11 @@ export default function EditTask({ taskNewEdited, onTaskEdited, taskToEdit, setT
         <div>
             <input 
                 type="text"
-                value={taskNewEdited.task ? taskNewEdited.task : ''}
+                value={taskNewEdited.task}
                 onChange={taskEdited}
             />
-            <button onClick={saveEditedTask}>Save</button>
-            <button onClick={cancelEdit}>Cancel</button>
+            <button onClick={saveEditedTask} className="btn btn-success">Save</button>
+            <button onClick={cancelEdit} className="btn btn-light">Cancel</button>
         </div>
     );
 }

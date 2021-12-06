@@ -7,8 +7,7 @@ export default function NewTask({ newTask, onNewTaskTextChange, onAddTaskButton 
     }
 
     const handleAddTaskButton = e => {
-        console.log(e.target.value);
-        onAddTaskButton(e.target.value);
+        onAddTaskButton();
     }
     
     return (
@@ -17,7 +16,7 @@ export default function NewTask({ newTask, onNewTaskTextChange, onAddTaskButton 
                 name="newTask"
                 placeholder="Add new task"
                 type="text"
-                value={newTask.newTask ? newTask.newTask : ''}
+                value={newTask}
                 onChange={handleNewTaskTextChange}
             />
             <button onClick={handleAddTaskButton}>Add</button>

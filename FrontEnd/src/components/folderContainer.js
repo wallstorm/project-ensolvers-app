@@ -1,12 +1,13 @@
 import React from "react";
-import Input from "../components/input";
-import Folder from "../components/folder";
+import NewFolder from "./newFolder";
+import Folder from "./folder";
 
 export default function FolderContainer({ 
     dataFolder, 
-    onNewFolderButton, 
+    valueNewFolder,
+    onNewFolder, 
     onNewFolderChange,
-    onFolderDeleteButton }) {
+    onFolderDelete }) {
 
     return (
         <div>
@@ -15,14 +16,15 @@ export default function FolderContainer({
                 dataFolder.map((folder, i) => (
                     <Folder 
                         folder={folder} 
-                        onFolderDeleteButton={onFolderDeleteButton}
+                        onFolderDeleteButton={onFolderDelete}
                         key={i} />
                 ))
             : null}
 
-            <Input
-                onNewFolderButton={onNewFolderButton} 
+            <NewFolder
+                onNewFolder={onNewFolder} 
                 onNewFolderChange={onNewFolderChange}
+                value={valueNewFolder}
             />            
         </div>        
     );

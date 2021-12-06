@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FolderRepository extends CrudRepository<FolderModel, Long> {
-    public abstract String findByFolder(String folder);
+    public abstract FolderModel findByFolder(String folder);
 }

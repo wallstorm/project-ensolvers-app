@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 
 // components
@@ -9,88 +9,112 @@ import EditItem from "./editItem";
 
 export default function Todo() {
 
-    const [ items, setItem ] = useState();
+    const [items, setItem] = useState([]);
+    const [ flag, setFlag ] = useState(false);
+
+    const [ newTask, setNewTask ] = useState('');
+
+    const [ edit, setEdit ] = useState({ task: null });
+    const [ taskNewEdited, setTaskNewEdited ] = useState({ task: '' });
 
     const params = useParams();
     
+    // get data
     useEffect(() => {
-        axios.get("http://localhost:8080/api/get/task").then((response) => {
+        axios.get(`http://localhost:8080/api/query?folder=${params.folder}`).then((response) => {
             setItem(response.data);
         })
-    }, []);
+    }, [flag, params]);
 
-    const [ isDone, setIsDone ] = useState(false);
-    const [ newTask, setNewTask ] = useState({ newTask: null });
+    // add task
+    const handleAddTaskButton = async () => {
+        await axios.post("http://localhost:8080/api/insert/task", 
+        { 
+            task: newTask,
+            done: false,
+            folder: params.folder
+        });
+        setNewTask('');
+        setFlag(!flag);
+    }
 
-    const [ edit, setEdit ] = useState({ task: null});
-    const [ taskNewEdited, setTaskNewEdited ] = useState({  task: null});
-
-    const onNewTaskTextChange = newTask => {
-        setNewTask({ newTask: newTask });
+    // get value change
+    const handleNewTaskTextChange = newTask => {
+        setNewTask(newTask);
     }
     
-    const onAddTaskButton = e => {
-        const folder = "cocinar";
-        // axios.post
-        console.log(newTask);
-        alert("aun en desarrollo")
-
-    }
-
-    const onIsDoneCheckbox = (toggle, id) => {
-        /*setTasks(tasks.map(done => {
+    // update checkbox
+    const handleIsDoneCheckbox = (toggle, id) => {
+        let taskDone = {};
+        items.forEach(done => {
             if (done.id === parseInt(id)) {
-                done.done = toggle;
-            } 
-            return done
-        }));*/
-        axios.post("http://localhost:8080/api/task/" + id, 
-        { 
-            id: id, 
-
-            done: toggle }).then(() => {
-            alert("Successful update");
-        })
-
+                taskDone = done;
+                return
+            }
+        });
+        (async () => {
+            await axios.post("http://localhost:8080/api/insert/task", 
+            { 
+                id: id, 
+                task: taskDone.task,
+                done: toggle,
+                folder: taskDone.folder
+            }).then(() => {
+                setFlag(!flag);
+            });
+        })();
     }
 
-    const onEditTask = (taskForEdit, id) => {
+    //  
+    const handleEditTask = (taskForEdit, id) => {
         setEdit({
             task: taskForEdit,
             id: id
         });
     }
 
+    // get edited task
     const onTaskEdited = taskEdited => {
         setTaskNewEdited({
             task: taskEdited
         });
     }
 
-    const onSaveEditedTask = e => {
-        alert("se debe llamar a axios y guardar en db");
+    // save edited task
+    const onSaveEditedTask = async () => {
+        await axios.post("http://localhost:8080/api/insert/task", 
+        { 
+            id: edit.id,
+            task: taskNewEdited.task,
+            done: false,
+            folder: params.folder
+        }).then(() => {
+            setTaskNewEdited({ task: '' });
+            setFlag(!flag);
+            setEdit({ task: null});
+        });
     }
 
-    // Cancelamos la edición de tarea
-    const onCancelEdit = e => {
+    // cancel edit task
+    const onCancelEdit = () => {
         setEdit({ task: null});
     }
-
+    
     return (
         <div>
+            
             {!edit.task ?
                 <>
-                    <h2>To-Do List</h2>
+                    <h2><Link to="/">Folders</Link> {">"} {params.folder} </h2>
                     <ItemList 
                         tasks={items} 
-                        isDone={isDone}
-                        onIsDoneCheckbox={onIsDoneCheckbox}
-                        onEditTask={onEditTask}
+                        onIsDoneCheckbox={handleIsDoneCheckbox}
+                        onEditTask={handleEditTask}
                     />
                     <NewItem 
                         newTask={newTask}
-                        onNewTaskTextChange={onNewTaskTextChange}
-                        onAddTaskButton={onAddTaskButton}
+                        onNewTaskTextChange={handleNewTaskTextChange}
+                        onAddTaskButton={handleAddTaskButton}
                     />
                 </>
             
@@ -98,10 +122,7 @@ export default function Todo() {
                 <>
                     <h2>Editing task "{edit.task}"</h2>
                     <EditItem 
-                        taskToEdit={edit} 
                         taskNewEdited={taskNewEdited}
-                        tasks={items} 
-                        setTasks={setItem} 
                         onSaveEditedTask={onSaveEditedTask} 
                         onCancelEdit={onCancelEdit}
                         onTaskEdited={onTaskEdited}

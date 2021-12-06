@@ -37,6 +37,10 @@ public class TaskModel {
         this.folder = folder;
     }
 
+    public TaskModel() {
+        
+    }
+
     public Long getId() {
         return id;
     }
