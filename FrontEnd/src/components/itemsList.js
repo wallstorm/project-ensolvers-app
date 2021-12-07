@@ -1,14 +1,14 @@
 import React from "react";
 import './folder';
 
-export default function Task({ tasks, onIsDoneCheckbox, onEditTaskButton }) {
+export default function ItemList({ tasks, onIsDoneCheckbox, onEditTask }) {
 
     const handleIsDoneCheckbox = e => {
         onIsDoneCheckbox(e.target.checked, e.target.name);
     }
 
     const handleEditTask = e => {
-        onEditTaskButton(e.target.value, e.target.id);
+        onEditTask(e.target.value, e.target.id);
     }
 
     if(!tasks) { return null }

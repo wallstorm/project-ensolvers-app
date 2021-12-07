@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 
 // components
-import ItemList from "./itemList";
+import ItemList from "./itemsList";
 import NewItem from "./newItem";
 import EditItem from "./editItem";
 
