@@ -12,15 +12,10 @@ export default function FolderContainer({
     return (
         <div>
             <h2>Folders</h2>
-            {dataFolder ? 
-                dataFolder.map((folder, i) => (
-                    <Folder 
-                        folder={folder} 
-                        onFolderDeleteButton={onFolderDelete}
-                        key={i} />
-                ))
-            : null}
-
+            <Folder 
+                data={dataFolder}
+                onFolderDeleteButton={onFolderDelete}
+            />
             <NewFolder
                 onNewFolder={onNewFolder} 
                 onNewFolderChange={onNewFolderChange}
